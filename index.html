@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Digital Gujarat Verification Portal</title>
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: #ffffff;
+      width: 700px;
+      border-radius: 20px;
+      box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+      overflow: hidden;
+      border: 1px solid #ccc;
+    }
+    .header {
+      background: #fbb400;
+      color: #fff;
+      padding: 1rem;
+      font-size: 1.75rem;
+      font-weight: normal;
+      text-align: center;
+    }
+    .content {
+      padding: 15px;
+    }
+    .instructions ul {
+      padding-left: center;
+      margin: 0 0 23px 0;
+    }
+    .instructions li {
+      font-size: 17px;
+      line-height: 1.4;
+      color: #0d0d0d;
+      margin-bottom: 5px;
+    }
+    .captcha-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .captcha-row input {
+      flex: center;
+      width: 250px;
+      height: 25px;
+      padding: 2px;
+      font-size: 14px;
+      border: 1px solid #aaa;
+      border-radius: 3px;
+    }
+    #captchaCanvas {
+      width: 120px;
+      height: 32px;
+      border: 1px solid #aaa;
+      
+    }
+    .refresh {
+      cursor: pointer;
+      font-size: 18px;
+      color: dodgerblue;
+      line-height: 1;
+       margin-left: -15px;
+    }
+    .btn {
+      width: 430px;
+      background: #0a73aa;
+      border: none;
+      color: #fff;
+      padding: 13px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      display: block;       /* ye important hai */
+      margin: 0 auto;       /* ye center karega */
+    }
+  
+    .btn:hover {
+      background: #005fa3;
+    }
+    #result {
+      margin-top: 8px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Digital Gujarat Verification Portal</div>
+    <div class="content">
+      <div class="instructions">
+        <ul>
+          <li>This portal is used to verify the issued documents from Digital Gujarat.</li>
+          <li>To verify the document kindly scan the QR code from the document.</li>
+        </ul>
+      </div>
+      <form method="post">
+  <div class="captcha-row">
+    <input type="text" id="captchaInput" name="captchaInput" placeholder="Enter Captcha">
+    <canvas id="captchaCanvas" width="130" height="40"></canvas>
+    <img src="doc/refresh.png" 
+         alt="Refresh" 
+         class="refresh" 
+         onclick="location.reload();" 
+         style="width:30px;height:30px;cursor:pointer;">
+  </div>
+</form>
+    </div>
+      <button class="btn" onclick="validateCaptcha()">Confirm</button>
+      <p id="result"></p>
+    </div>
+  </div>
+
+  <script>
+    let captchaCode = "";
+
+    function randomChar() {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+      return chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+
+    function drawBackground(ctx, w, h) {
+      const styles = ["lines", "dots", "grid", "zigzag", "diagonal", "cross"];
+      const style = styles[Math.floor(Math.random() * styles.length)];
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.lineWidth = 1;
+      switch (style) {
+        case "lines":
+          ctx.strokeStyle = "#888";
+          for (let y = 0; y < h; y += 5) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(w, y);
+            ctx.stroke();
+          }
+          break;
+
+        case "dots":
+          ctx.fillStyle = "#aaa";
+          for (let y = 5; y < h; y += 5) {
+            for (let x = 5; x < w; x += 5) {
+              ctx.fillRect(x, y, 2, 2);
+            }
+          }
+          break;
+
+        case "grid":
+          ctx.strokeStyle = "#0a0";
+          for (let y = 0; y < h; y += 5) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(w, y);
+            ctx.stroke();
+          }
+          for (let x = 0; x < w; x += 5) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, h);
+            ctx.stroke();
+          }
+          break;
+
+        case "zigzag":
+          ctx.strokeStyle = "#a0a";
+          for (let x = 0; x < w; x += 5) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x + 5, h);
+            ctx.stroke();
+          }
+          break;
+
+        case "diagonal":
+          ctx.strokeStyle = "#08a";
+          for (let x = -h; x < w; x += 5) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x + h, h);
+            ctx.stroke();
+          }
+          break;
+
+        case "cross":
+          ctx.strokeStyle = "#c55";
+          for (let x = 0; x < w; x += 5) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, h);
+            ctx.stroke();
+          }
+          for (let y = 0; y < h; y += 5) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(w, y);
+            ctx.stroke();
+          }
+          break;
+      }
+    }
+
+    function generateCaptcha() {
+  const canvas = document.getElementById("captchaCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // background
+  drawBackground(ctx, canvas.width, canvas.height);
+
+  // text
+  captchaCode = "";
+  const length = Math.random() > 0.5 ? 4 : 5; // kabhi 4 kabhi 5 chars
+  for (let i = 0; i < length; i++) {
+    const char = randomChar();
+    captchaCode += char;
+
+    ctx.font = `${18 + Math.random()*6}px Arial`;
+    ctx.fillStyle = `rgb(${Math.random()*150},${Math.random()*150},${Math.random()*150})`;
+
+    ctx.save();
+    // Random jagah + rotate
+    const x = 18 + i * 22;
+    const y = 20 + Math.random() * 15; // thoda upar-niche
+    ctx.translate(x, y);
+    ctx.rotate((Math.random() - 0.5) * 0.5);
+    ctx.fillText(char, 0, 0);
+    ctx.restore();
+  }
+}
+     function validateCaptcha() {
+      const input = document.getElementById("captchaInput").value.trim();
+      if (input === captchaCode) {
+        window.location.href = "doc/Verify.aspx.pdf"; 
+      } else {
+        alert("Wrong captcha");
+        generateCaptcha();
+      }
+    }
+
+    generateCaptcha();
+  </script>
+</body>
+</html>
