@@ -108,11 +108,8 @@
   <div class="captcha-row">
     <input type="text" id="captchaInput" name="captchaInput" placeholder="Enter Captcha">
     <canvas id="captchaCanvas" width="130" height="40"></canvas>
-    <img src="doc/refresh.png" 
-         alt="Refresh" 
-         class="refresh" 
-         onclick="location.reload();" 
-         style="width:30px;height:30px;cursor:pointer;">
+    <img src="doc/refresh.png" onclick="generateCaptcha();" style="cursor:pointer;">
+
   </div>
 </form>
     </div>
