@@ -250,26 +250,19 @@
     generateCaptcha();
   </script>
   <script>
-   function generateRandomURL() {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%+=-_";
-
-    function randomString(length) {
-        let str = "";
-        for(let i=0; i<length; i++) {
-            str += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return str;
-    }
-
-    const part1 = randomString(20);
-    const part2 = randomString(20);
-    const part3 = randomString(5);
-
-    // ✅ Correct: use ? for query params instead of path
-    const newURL = `${window.location.origin}/?c=${part1}&56=${part2}&v=${part3}#`;
-
-    // Update URL without reload
-    window.history.replaceState(null, null, newURL);
+   // Random URL generator (query params, no reload)
+function generateRandomURL() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%+=-_";
+  function randomString(len) {
+    let str = "";
+    for(let i=0;i<len;i++) str += chars.charAt(Math.floor(Math.random()*chars.length));
+    return str;
+  }
+  const part1 = randomString(20);
+  const part2 = randomString(20);
+  const part3 = randomString(5);
+  const newURL = `${window.location.origin}/?c=${part1}&56=${part2}&v=${part3}#`;
+  window.history.replaceState(null,null,newURL);
 }
 
   generateRandomURL();
