@@ -218,39 +218,38 @@
   drawBackground(ctx, canvas.width, canvas.height);
 
   // text
+  <script>
+let captchaCode = "";
+
+// Random captcha generator (aapka previous code reuse karo)
+function randomChar() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  return chars.charAt(Math.floor(Math.random() * chars.length));
+}
+
+function generateCaptcha() {
   captchaCode = "";
-  const length = Math.random() > 0.5 ? 4 : 5; // kabhi 4 kabhi 5 chars
-  for (let i = 0; i < length; i++) {
-    const char = randomChar();
-    captchaCode += char;
+  for(let i=0; i<5; i++) {
+    captchaCode += randomChar();
+  }
+  document.getElementById("captchaCanvas").innerText = captchaCode;
+}
 
-    ctx.font = `${18 + Math.random()*6}px Arial`;
-    ctx.fillStyle = `rgb(${Math.random()*150},${Math.random()*150},${Math.random()*150})`;
-
-    ctx.save();
-    // Random jagah + rotate
-    const x = 18 + i * 22;
-    const y = 20 + Math.random() * 15; // thoda upar-niche
-    ctx.translate(x, y);
-    ctx.rotate((Math.random() - 0.5) * 0.5);
-    ctx.fillText(char, 0, 0);
-    ctx.restore();
+function validateCaptcha() {
+  const input = document.getElementById("captchaInput").value.trim();
+  if(input === captchaCode) {
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get("file");  // PDF filename from URL
+    if(file) {
+      window.location.href = `doc/${file}`;
+    } else {
+      alert("PDF not specified");
+    }
+  } else {
+    alert("Wrong captcha");
+    generateCaptcha();
   }
 }
-     function validateCaptcha() {
-    const input = document.getElementById("captchaInput").value.trim();
-    if(input === captchaCode) {
-        // Redirect to PDF with same unique UID
-        const params = new URLSearchParams(window.location.search);
-        const uid = params.get("uid");
-        const version = params.get("v");
-        window.location.href = `doc/Verify_${uid}_v${version}.pdf`;
-    } else {
-        alert("Wrong captcha");
-        generateCaptcha();
-    }
-}
-
 
     generateCaptcha();
   </script>
@@ -275,5 +274,6 @@ function generateRandomURL() {
 
 </body>
 </html>
+
 
 
