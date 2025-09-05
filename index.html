@@ -108,8 +108,11 @@
   <div class="captcha-row">
     <input type="text" id="captchaInput" name="captchaInput" placeholder="Enter Captcha">
     <canvas id="captchaCanvas" width="130" height="40"></canvas>
-    <img src="doc/refresh.png" onclick="generateCaptcha();" style="cursor:pointer;">
-
+    <img src="doc/refresh.png" 
+     alt="Refresh" 
+     class="refresh" 
+     onclick="generateCaptcha(); generateRandomURL();" 
+     style="width:30px;height:30px;cursor:pointer;">
   </div>
 </form>
     </div>
@@ -247,9 +250,9 @@
     generateCaptcha();
   </script>
   <script>
-function generateRandomURL() {
+   function generateRandomURL() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%+=-_";
-    
+
     function randomString(length) {
         let str = "";
         for(let i=0; i<length; i++) {
@@ -262,13 +265,12 @@ function generateRandomURL() {
     const part2 = randomString(20);
     const part3 = randomString(5);
 
-    const newURL = `c=${part1}&56=${part2}&v=${part3}#`;
+    // ✅ Correct: use ? for query params instead of path
+    const newURL = `${window.location.origin}/?c=${part1}&56=${part2}&v=${part3}#`;
 
-    // Update browser URL without triggering a server request
+    // Update URL without reload
     window.history.replaceState(null, null, newURL);
 }
-
-
 
   generateRandomURL();
 </script>
