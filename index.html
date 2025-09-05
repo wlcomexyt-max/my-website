@@ -218,29 +218,31 @@
   drawBackground(ctx, canvas.width, canvas.height);
 
   // text
-  <script>
-let captchaCode = "";
-
-// Random captcha generator (aapka previous code reuse karo)
-function randomChar() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  return chars.charAt(Math.floor(Math.random() * chars.length));
-}
-
-function generateCaptcha() {
   captchaCode = "";
-  for(let i=0; i<5; i++) {
-    captchaCode += randomChar();
-  }
-  document.getElementById("captchaCanvas").innerText = captchaCode;
-}
+  const length = Math.random() > 0.5 ? 4 : 5; // kabhi 4 kabhi 5 chars
+  for (let i = 0; i < length; i++) {
+    const char = randomChar();
+    captchaCode += char;
 
-function validateCaptcha() {
+    ctx.font = `${18 + Math.random()*6}px Arial`;
+    ctx.fillStyle = `rgb(${Math.random()*150},${Math.random()*150},${Math.random()*150})`;
+
+    ctx.save();
+    // Random jagah + rotate
+    const x = 18 + i * 22;
+    const y = 20 + Math.random() * 15; // thoda upar-niche
+    ctx.translate(x, y);
+    ctx.rotate((Math.random() - 0.5) * 0.5);
+    ctx.fillText(char, 0, 0);
+    ctx.restore();
+  }
+}
+    function validateCaptcha() {
   const input = document.getElementById("captchaInput").value.trim();
   if(input === captchaCode) {
     const params = new URLSearchParams(window.location.search);
-    const file = params.get("file");  // PDF filename from URL
-    if(file) {
+    const file = params.get("file");  
+    if(file){
       window.location.href = `doc/${file}`;
     } else {
       alert("PDF not specified");
@@ -274,6 +276,4 @@ function generateRandomURL() {
 
 </body>
 </html>
-
-
 
