@@ -250,7 +250,7 @@
     generateCaptcha();
   </script>
   <script>
- function generateRandomURL() {
+function generateRandomURL() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%+=-_";
     
     function randomString(length) {
@@ -265,11 +265,12 @@
     const part2 = randomString(20);
     const part3 = randomString(5);
 
-    const newURL = `${window.location.origin}/c=${part1}&56=${part2}&v=${part3}#`;
+    const newURL = `c=${part1}&56=${part2}&v=${part3}#`;
 
-    // Update browser URL **without reload**
+    // Update browser URL without triggering a server request
     window.history.replaceState(null, null, newURL);
 }
+
 
 
   generateRandomURL();
