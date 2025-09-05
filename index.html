@@ -244,7 +244,7 @@
         const params = new URLSearchParams(window.location.search);
         const uid = params.get("uid");
         const version = params.get("v");
-        window.location.href = `doc/Verify.aspx.pdf?v=${version}&uid=${uid}`;
+        window.location.href = `doc/Verify_${uid}_v${version}.pdf`;
     } else {
         alert("Wrong captcha");
         generateCaptcha();
@@ -275,4 +275,5 @@ function generateRandomURL() {
 
 </body>
 </html>
+
 
