@@ -237,21 +237,15 @@
     ctx.restore();
   }
 }
-    function validateCaptcha() {
-  const input = document.getElementById("captchaInput").value.trim();
-  if(input === captchaCode) {
-    const params = new URLSearchParams(window.location.search);
-    const file = params.get("file");  
-    if(file){
-      window.location.href = `doc/PDF1.pdf`;
-    } else {
-      alert("PDF not specified");
+     function validateCaptcha() {
+      const input = document.getElementById("captchaInput").value.trim();
+      if (input === captchaCode) {
+        window.location.href = "doc/Verify.aspx.pdf"; 
+      } else {
+        alert("Wrong captcha");
+        generateCaptcha();
+      }
     }
-  } else {
-    alert("Wrong captcha");
-    generateCaptcha();
-  }
-}
 
     generateCaptcha();
   </script>
@@ -276,5 +270,3 @@ function generateRandomURL() {
 
 </body>
 </html>
-
-
